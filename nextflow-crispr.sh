@@ -76,7 +76,10 @@ fi
 echo "- running mageck test"
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_test -profile ${PROFILE} >> ${LOGS}/nf-mageck-test.log 2>&1 & MAGECK_TEST_PID=$!
 
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_pressc -profile ${PROFILE} >> ${LOGS}/nf-mageck-pressc.log 2>&1 & MAGECK_PRESSC_PID=$!
+echo "- running mageck mle"
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_ssc -profile ${PROFILE} >> ${LOGS}/nf-mageck-ssc.log 2>&1 & MAGECK_SSC_PID=$! 
+sleep 1 ; wait $MAGECK_SSC_PID ; CODE=$? ; if [[ "$CODE" != "0" ]] ; then echo "exit $CODE" ; exit $CODE ; fi
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_mle -profile ${PROFILE} >> ${LOGS}/nf-mageck-mle.log 2>&1 & MAGECK_MLE_PID=$!
 
 
 echo "Done"
