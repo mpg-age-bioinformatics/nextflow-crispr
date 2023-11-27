@@ -1,0 +1,10 @@
+nf-fastqc
+nf-cutadapt
+nf-mageck
+nf-kallisto
+nf-featurecounts
+nf-multiqc
+nf-deseq2
+.nextflow*
+work
+notes.md

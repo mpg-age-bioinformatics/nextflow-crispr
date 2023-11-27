@@ -1,0 +1,4 @@
+export project_folder=/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/
+export renamed=/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/raw_renamed/
+export clean_reads=/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/cutadapt_output/
+export fastqc_clean=fastqc_clean_output
