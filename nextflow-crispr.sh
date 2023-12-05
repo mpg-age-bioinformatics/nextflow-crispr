@@ -1,8 +1,9 @@
 #!/bin/bash
 
-set -e
+# set -e
 
-PROFILE=raven
+PROFILE=studio
+# PROFILE=raven
 LOGS="work"
 PARAMS="params.json"
 
@@ -10,76 +11,61 @@ source crispr.config.src
 
 mkdir -p ${LOGS}
 
+wait_for(){
+    PID=$(echo "$1" | cut -d ":" -f 1 )
+    PRO=$(echo "$1" | cut -d ":" -f 2 )
+    wait $PID
+    CODE=$?
+    if [[ "$CODE" != "0" ]] ; 
+        then
+            echo "$PRO failed"
+            echo "$CODE"
+            exit $CODE
+    fi
+}
+
 get_images() {
   echo "- downloading images"
   nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE} -params-file ${PARAMS} -entry images -profile ${PROFILE} >> ${LOGS}/get_images.log 2>&1
   nextflow run ${ORIGIN}nf-cutadapt ${CUTADAPT_RELEASE} -params-file ${PARAMS} -entry images -profile ${PROFILE} >> ${LOGS}/get_images.log 2>&1
   nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry images -profile ${PROFILE} >> ${LOGS}/get_images.log 2>&1 
-
-
-  #&& \
 }
 
-run_fastqc() {
-  echo "- running fastqc"
-  nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE} -params-file ${PARAMS} -profile ${PROFILE} >> ${LOGS}/nf-fastqc.log 2>&1 && \
+run_upload(){
   nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE} -params-file ${PARAMS} -entry upload -profile ${PROFILE} >> ${LOGS}/nf-fastqc.log 2>&1
-}
-
-run_fastqc_clean() {
-  echo "- running fastqc on clean reads"
-  nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE} -params-file ${PARAMS} --fastqc_raw_data ${clean_reads} --fastqc_output ${fastqc_clean} -profile ${PROFILE} >> ${LOGS}/nf-fastqc.log 2>&1 && \
   nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE} -params-file ${PARAMS} --fastqc_output ${fastqc_clean} -entry upload -profile ${PROFILE} >> ${LOGS}/nf-fastqc.log 2>&1
 }
 
 get_images && sleep 1
 
-run_fastqc & RUN_fastqc_PID=$!
-sleep 1
+echo "- running fastqc"
+nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE} -params-file ${PARAMS} -profile ${PROFILE} >> ${LOGS}/nf-fastqc.log 2>&1 & FASTQC_PID=$!
 
-echo "- running cutadpt"
-nextflow run ${ORIGIN}nf-cutadapt ${CUTADAPT_RELEASE} -params-file ${PARAMS} -profile ${PROFILE} >> ${LOGS}/nf-cutadapt.log 2>&1 & CUTADAPT_PID=$!
-sleep 1
-wait $CUTADAPT_PID
-CODE=$?
-if [[ "$CODE" != "0" ]] ; 
-    then
-        echo "exit $CODE"
-        exit $CODE
-fi
+echo "- running cutadapt"
+nextflow run ${ORIGIN}nf-cutadapt ${CUTADAPT_RELEASE} -params-file ${PARAMS} -profile ${PROFILE} >> ${LOGS}/nf-cutadapt.log 2>&1 && sleep 1
 
-run_fastqc_clean & RUN_fastqc_clean_PID=$!
-sleep 1 
+echo "- running fastqc on trimmed reads"
+nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE} -params-file ${PARAMS} --fastqc_raw_data ${clean_reads} --fastqc_output ${fastqc_clean} -profile ${PROFILE} >> ${LOGS}/nf-fastqc-clean.log 2>&1 & FASTQC_CLEAN_PID=$!
 
 echo "- running mageck count"
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_count -profile ${PROFILE} >> ${LOGS}/nf-mageck-count.log 2>&1 & MAGECK_COUNT_PID=$!
-sleep 1
-wait $MAGECK_COUNT_PID
-CODE=$?
-if [[ "$CODE" != "0" ]] ; 
-    then
-        echo "exit $CODE"
-        exit $CODE
-fi
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_count -profile ${PROFILE} >> ${LOGS}/nf-mageck-count.log 2>&1 && sleep 1
 
-
-echo "- running mageck pre-test"
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_pretest -profile ${PROFILE} >> ${LOGS}/nf-mageck-test.log 2>&1 & MAGECK_TEST_PID=$!
-sleep 1
-wait $MAGECK_TEST_PID
-CODE=$?
-if [[ "$CODE" != "0" ]] ; 
-    then
-        echo "exit $CODE"
-        exit $CODE
-fi
 echo "- running mageck test"
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_test -profile ${PROFILE} >> ${LOGS}/nf-mageck-test.log 2>&1 & MAGECK_TEST_PID=$!
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_pretest -profile ${PROFILE} >> ${LOGS}/nf-mageck-test.log 2>&1 && \
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_test -profile ${PROFILE} >> ${LOGS}/nf-mageck-test.log 2>&1 && sleep 1
+
+echo "- running mageck pathway"
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_pathway -profile ${PROFILE} >> ${LOGS}/nf-mageck-pathway.log 2>&1 & MAGECK_PATHWAY_PID=$!
+
+echo "- running mageck plot"
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_plot -profile ${PROFILE} >> ${LOGS}/nf-mageck-plot.log 2>&1 & MAGECK_PLOT_PID=$!
 
 echo "- running mageck mle"
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_ssc -profile ${PROFILE} >> ${LOGS}/nf-mageck-ssc.log 2>&1 & MAGECK_SSC_PID=$! 
-sleep 1 ; wait $MAGECK_SSC_PID ; CODE=$? ; if [[ "$CODE" != "0" ]] ; then echo "exit $CODE" ; exit $CODE ; fi
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_premle -profile ${PROFILE} >> ${LOGS}/nf-mageck-premle.log 2>&1  && \
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_mle -profile ${PROFILE} >> ${LOGS}/nf-mageck-mle.log 2>&1 & MAGECK_MLE_PID=$!
+
+
+for PID in "${FASTQC_PID}:FASTQC" "${FASTQC_CLEAN_PID}:FASTQC_CLEAN" "${MAGECK_MLE_PID}:MAGECK_MLE" "${MAGECK_PATHWAY_PID}:MAGECK_PATHWAY" "${MAGECK_PLOT_PID}:MAGECK_PLOT"  ; do wait_for $PID ; done
 
 
 echo "Done"

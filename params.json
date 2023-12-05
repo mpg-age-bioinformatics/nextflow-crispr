@@ -1,8 +1,10 @@
 { 
+  "image_folder":"/nexus/posix0/MAGE-flaski/service/images/" ,
   "project_folder" : "/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data" ,
   "fastqc_raw_data" : "/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/raw_renamed" ,
   "cutadapt_raw_data" : "/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/raw_renamed",
   "sgRNA_size" : "30",
+  "SSC_sgRNA_size" : "20",
   "upstreamseq" : "TGTGGAAAGGACGAAACACC",
   "library" : "/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/library.csv",
   "input_count" : "/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/cutadapt_output" , 
@@ -14,6 +16,11 @@
   "mageck_test_remove_zero_threshold": "0" , 
   "cnv_file": "/nexus/posix0/MAGE-flaski/service/projects/data/CRISPR_Screening/CS_main_pipe/CCLE_copynumber_byGene_2013-12-03.txt",
   "cnv_line": "U2OS_BONE",
-  "mleoutput": "mageck_output/fastq/mle/",
-  "efficiency_matrix": "/SSC0.1/matrix/human_CRISPRi_20bp.matrix"
+  "output_mle": "mageck_output/fastq/mle/",
+  "efficiency_matrix": "/SSC0.1/matrix/human_CRISPRi_20bp.matrix",
+  "mle_matrices":"/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/raw_renamed",
+  "library_xlsx":"/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/library.xlsx",
+  "gmt_file":"/nexus/posix0/MAGE-flaski/service/projects/data/CRISPR_Screening/CS_main_pipe/msigdb.v7.2.symbols.gmt",
+  "output_pathway":"mageck_output/fastq/pathway",
+  "output_plot":"mageck_output/fastq/plot"
 }
