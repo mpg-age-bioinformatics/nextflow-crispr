@@ -1,6 +1,7 @@
 nf-fastqc
 nf-cutadapt
 nf-mageck
+nf-bagel
 nf-kallisto
 nf-featurecounts
 nf-multiqc
