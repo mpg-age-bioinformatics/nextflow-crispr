@@ -6,6 +6,7 @@ nf-kallisto
 nf-featurecounts
 nf-multiqc
 nf-deseq2
+nf-drugz
 .nextflow*
 work
 notes.md

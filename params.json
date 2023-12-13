@@ -37,5 +37,6 @@
   "ouput_mageck_count" : "/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/mageck_output/fastq" ,
   "output_bagel":"/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/bagel_output",
   "bagel_essential":"/bagel/CEGv2.txt",
-  "bagel_nonessential":"/bagel/NEGv1.txt"
+  "bagel_nonessential":"/bagel/NEGv1.txt",
+  "output_drugz":"/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/drugz_output",
 }
