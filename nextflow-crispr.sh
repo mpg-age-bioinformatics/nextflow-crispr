@@ -57,7 +57,6 @@ echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck count"
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_count -profile ${PROFILE} >> ${LOGS}/nf-mageck-count.log 2>&1 && sleep 1
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck test"
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_pretest -profile ${PROFILE} >> ${LOGS}/nf-mageck-test.log 2>&1 && \
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_test -profile ${PROFILE} >> ${LOGS}/nf-mageck-test.log 2>&1 && sleep 1
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck pathway"
@@ -77,7 +76,6 @@ echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck flute"
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_flute -profile ${PROFILE} >> ${LOGS}/nf-mageck-flute.log 2>&1 & MAGECK_FLUTE_PID=$!
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): bagel"
-nextflow run ${ORIGIN}nf-bagel ${BAGEL_RELEASE} -params-file ${PARAMS} -entry preprocess -profile ${PROFILE} >> ${LOGS}/nf-bagel.log 2>&1 && \
 nextflow run ${ORIGIN}nf-bagel ${BAGEL_RELEASE} -params-file ${PARAMS} -profile ${PROFILE} >> ${LOGS}/nf-bagel.log 2>&1 & BAGEL_PID=$!
 
 
