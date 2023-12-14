@@ -31,7 +31,8 @@ get_images() {
   nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE} -params-file ${PARAMS} -entry images -profile ${PROFILE} >> ${LOGS}/get_images.log 2>&1 && sleep 1
   nextflow run ${ORIGIN}nf-cutadapt ${CUTADAPT_RELEASE} -params-file ${PARAMS} -entry images -profile ${PROFILE} >> ${LOGS}/get_images.log 2>&1 && sleep 1
   nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry images -profile ${PROFILE} >> ${LOGS}/get_images.log 2>&1 && sleep 1
-  nextflow run ${ORIGIN}nf-bagel ${BAGEL_RELEASE} -params-file ${PARAMS}  -entry images -profile ${PROFILE} && sleep 1
+  nextflow run ${ORIGIN}nf-bagel ${BAGEL_RELEASE} -params-file ${PARAMS}  -entry images -profile ${PROFILE} >> ${LOGS}/get_images.log 2>&1 && sleep 1
+  nextflow run ${ORIGIN}nf-drugz ${BAGEL_RELEASE} -params-file ${PARAMS} -entry images -profile ${PROFILE} >> ${LOGS}/get_images.log 2>&1 && sleep 1
 }
 
 run_upload(){
@@ -65,6 +66,12 @@ nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck plot"
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_plot -profile ${PROFILE} >> ${LOGS}/nf-mageck-plot.log 2>&1 & MAGECK_PLOT_PID=$!
 
+echo "$(date '+%Y-%m-%d %H:%M:%S'): bagel"
+nextflow run ${ORIGIN}nf-bagel ${BAGEL_RELEASE} -params-file ${PARAMS} -profile ${PROFILE} >> ${LOGS}/nf-bagel.log 2>&1 & BAGEL_PID=$!
+
+echo "$(date '+%Y-%m-%d %H:%M:%S'): drugz"
+nextflow run ${ORIGIN}nf-drugz ${BAGEL_RELEASE} -params-file ${PARAMS} -profile ${PROFILE} >> ${LOGS}/nf-drugz.log 2>&1 & BAGEL_PID=$!
+
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck mle"
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_premle -profile ${PROFILE} >> ${LOGS}/nf-mageck-premle.log 2>&1  && \
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_mle -profile ${PROFILE} >> ${LOGS}/nf-mageck-mle.log 2>&1 && sleep 1
@@ -74,9 +81,6 @@ nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry 
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck flute"
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_flute -profile ${PROFILE} >> ${LOGS}/nf-mageck-flute.log 2>&1 & MAGECK_FLUTE_PID=$!
-
-echo "$(date '+%Y-%m-%d %H:%M:%S'): bagel"
-nextflow run ${ORIGIN}nf-bagel ${BAGEL_RELEASE} -params-file ${PARAMS} -profile ${PROFILE} >> ${LOGS}/nf-bagel.log 2>&1 & BAGEL_PID=$!
 
 
 
