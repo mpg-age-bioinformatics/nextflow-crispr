@@ -143,6 +143,9 @@ nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck test"
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_test -profile ${PROFILE} >> ${LOGS}/nf-mageck-test.log 2>&1 && sleep 1
 
+echo "$(date '+%Y-%m-%d %H:%M:%S'): magecku"
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry magecku -profile ${PROFILE} >> ${LOGS}/nf-mageck-u.log 2>&1 && sleep 1
+
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck pathway"
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_pathway -profile ${PROFILE} >> ${LOGS}/nf-mageck-pathway.log 2>&1 & MAGECK_PATHWAY_PID=$!
 
