@@ -39,6 +39,7 @@
   "magecku_fdr":"0.05",
   "magecku_threshold_control_groups":"5",
   "magecku_threshold_treatment_groups":"5",
+  "nontargeting_tag":"Non-Targeting Control",
   "output_bagel":"/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/bagel_output",
   "bagel_essential":"/bagel/CEGv2.txt",
   "bagel_nonessential":"/bagel/NEGv1.txt",
