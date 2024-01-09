@@ -47,5 +47,5 @@
   "output_acer":"/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/drugz_output",
   "use_neg_ctrl":"T",
   "using_master_library":"F",
-  "acer_master_library":"none",
+  "acer_master_library":"none"
 }

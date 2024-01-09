@@ -3,12 +3,13 @@
 # set -e
 
 ## variables
-PROFILE=$1
+PROFILE=$2
 # PROFILE=raven
 LOGS="work"
 PARAMS="params.json"
-source crispr.config.src
+source crispr.config
 
+mkdir -p ${LOGS}
 
 ## functions
 get_latest_release() {
