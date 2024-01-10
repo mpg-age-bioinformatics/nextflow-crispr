@@ -4,7 +4,6 @@
 
 ## variables
 PROFILE=$2
-# PROFILE=raven
 LOGS="work"
 PARAMS="params.json"
 source crispr.config
@@ -180,18 +179,40 @@ for PID in "${FASTQC_PID}:FASTQC" \
   "${FASTQC_CLEAN_PID}:FASTQC_CLEAN" \
   "${MAGECK_PATHWAY_PID}:MAGECK_PATHWAY" \
   "${MAGECK_PLOT_PID}:MAGECK_PLOT" \
-  "${BAGEL_PID}:BAGEL" \ 
+  "${BAGEL_PID}:BAGEL" \
   "${DRUGZ_PID}:DRUGZ" \
-  "${ACER_PID}:"ACER" \
-  "${MAUDE_PID}:"MAUDE" \
+  "${ACER_PID}:ACER" \
+  "${MAUDE_PID}:MAUDE" \
   "${MAGECK_VISPR_PID}:MAGECK_VISPR" \
   "${MAGECK_FLUTE_PID}:MAGECK_FLUTE"
   do 
     wait_for $PID
 done
 
+echo -e "Hi,\n\n\
+Your run is now completed.\n\n\
+This is an automatically generated analysis.\n\n\
+Best wishes,\n\n\
+The Bioinformatics Core Facility of the Max Planck Institute for Biology of Ageing" > "${upload_list}.email"
 
-echo "Done"
+if [ "$PROFILE" == "raven" ] ; 
+  then
+    module load singularity
+    singularity exec  -B /raven:/raven -B /ptmp:/ptmp -B /nexus:/nexus /nexus/posix0/MAGE-flaski/service/images/jupyter-age.3.0.6.sif /bin/bash  << PYOF
+source /nexus/posix0/MAGE-flaski/service/projects/code/Bioinformatics/bit_automation/libraries/python3/bin/activate
+git add -A . && git commit -m "finished; close #2" && git push
+PYOF
+
+elif [ "$PROFILE" == "studio" ] ; 
+  then 
+    singularity exec -B /nexus:/nexus /nexus/posix0/MAGE-flaski/service/images/jupyter-age.3.0.6.sif /bin/bash  << PYOF
+source /nexus/posix0/MAGE-flaski/service/projects/code/Bioinformatics/bit_automation/libraries/python3/bin/activate
+git add -A . && git commit -m "finished; close #2" && git push
+PYOF
+
+fi
+
+echo $(date +"%Y/%m/%d %H:%M:%S")": finished"
 exit
 
 # run_kallisto & RUN_kallisto_PID=$!
@@ -208,3 +229,7 @@ exit
 #         fi
         
 # done
+
+
+
+            
