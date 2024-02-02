@@ -191,6 +191,7 @@ for PID in "${FASTQC_PID}:FASTQC" \
     wait_for $PID
 done
 
+rsync -rtvh ${LOGS} ${project_folder}
 
 if [ "$failed" = true ]; then
 
@@ -212,47 +213,3 @@ fi
 
 exit
 
-# echo -e "Hi,\n\n\
-# Your run is now completed.\n\n\
-# This is an automatically generated analysis.\n\n\
-# Best wishes,\n\n\
-# The Bioinformatics Core Facility of the Max Planck Institute for Biology of Ageing" > "${upload_list}.email"
-
-# if [ "$PROFILE" == "raven" ] ; 
-#   then
-#     module load singularity
-#     singularity exec  -B /raven:/raven -B /ptmp:/ptmp -B /nexus:/nexus /nexus/posix0/MAGE-flaski/service/images/jupyter-age.3.0.6.sif /bin/bash  << PYOF
-# source /nexus/posix0/MAGE-flaski/service/projects/code/Bioinformatics/bit_automation/libraries/python3/bin/activate
-# git add -A . && git commit -m "finished; close #2" && git push
-# PYOF
-
-# elif [ "$PROFILE" == "studio" ] ; 
-#   then 
-#     singularity exec -B /nexus:/nexus /nexus/posix0/MAGE-flaski/service/images/jupyter-age.3.0.6.sif /bin/bash  << PYOF
-# source /nexus/posix0/MAGE-flaski/service/projects/code/Bioinformatics/bit_automation/libraries/python3/bin/activate
-# git add -A . && git commit -m "finished; close #2" && git push
-# PYOF
-
-# fi
-
-# echo $(date +"%Y/%m/%d %H:%M:%S")": finished"
-# exit
-
-# run_kallisto & RUN_kallisto_PID=$!
-# sleep 1
-
-# for PID in $RUN_fastqc_PID $RUN_kallisto_PID ; 
-#     do
-#         wait $PID
-#         CODE=$?
-#         if [[ "$CODE" != "0" ]] ; 
-#             then
-#                 echo "exit $CODE"
-#                 exit $CODE
-#         fi
-        
-# done
-
-
-
-            
