@@ -4,16 +4,11 @@
 
 # export clean_reads=
 # export fastqc_clean=
-# export PARAMS="/tmp/crispr_test/output/params.json"
-
-if [ ! -z ${PARAMS} ] ; then 
-  echo "Please set `PARAMS=</path/to/params.json>` in order to run this workflow.
-fi
-
 
 ## variables
 PROFILE="standard"
 LOGS="work"
+PARAMS="${2}"
 # source crispr.config
 
 mkdir -p ${LOGS}
