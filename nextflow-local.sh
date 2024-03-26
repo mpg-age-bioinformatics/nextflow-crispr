@@ -8,7 +8,7 @@
 ## variables
 PROFILE="standard"
 LOGS="work"
-PARAMS="${2}"
+PARAMS="${3}"
 # source crispr.config
 
 mkdir -p ${LOGS}
@@ -39,7 +39,7 @@ wait_for(){
 failed=false
 
 ## define nextflow modules source
-if [[ "$1" == "release" ]] ; 
+if [[ "$2" == "release" ]] ; 
   then
 
     ORIGIN="mpg-age-bioinformatics/"
@@ -85,7 +85,7 @@ else
           git clone git@github.com:mpg-age-bioinformatics/${repo}.git
       fi
 
-      if [[ "$1" == "checkout" ]] ;
+      if [[ "$2" == "checkout" ]] ;
         then
           cd ${repo}
           git pull
