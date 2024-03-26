@@ -9,5 +9,5 @@ nextflow run mpg-age-bioinformatics/nf-flaski-configs -r ${LATEST_RELEASE} --raw
 
 And then run the workflow with:
 ```
-bash nextflow-rnaseq.local.sh clone </path/to/output/params.json>
+bash nextflo-local.sh clone </path/to/output/params.json>
 ```
