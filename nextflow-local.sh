@@ -2,9 +2,13 @@
 
 # set -e
 
-#export clean_reads=
-#export fastqc_clean=
-#PARAMS="/tmp/crispr_test/output/params.json"
+# export clean_reads=
+# export fastqc_clean=
+# export PARAMS="/tmp/crispr_test/output/params.json"
+
+if [ ! -z ${PARAMS} ] ; then 
+  echo "Please set `PARAMS=</path/to/params.json>` in order to run this workflow.
+fi
 
 
 ## variables
@@ -124,11 +128,6 @@ get_images() {
 
 }
 
-# run_upload(){
-#   nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE} -params-file ${PARAMS} -entry upload -profile ${PROFILE} >> ${LOGS}/nf-fastqc.log 2>&1
-#   nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE} -params-file ${PARAMS} --fastqc_output ${fastqc_clean} -entry upload -profile ${PROFILE} >> ${LOGS}/nf-fastqc.log 2>&1
-# }
-
 get_images && sleep 1
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): preprocess"
@@ -140,8 +139,16 @@ nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE} -params-file ${PARAMS} --user 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): cutadapt"
 nextflow run ${ORIGIN}nf-cutadapt ${CUTADAPT_RELEASE} -params-file ${PARAMS} --user "$(id -u):$(id -g)" -profile ${PROFILE} >> ${LOGS}/nf-cutadapt.log 2>&1 && sleep 1
 
-echo "$(date '+%Y-%m-%d %H:%M:%S'): fastqc on trimmed reads"
-nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE} -params-file ${PARAMS} --user "$(id -u):$(id -g)" --fastqc_raw_data ${clean_reads} --fastqc_output ${fastqc_clean} -profile ${PROFILE} >> ${LOGS}/nf-fastqc-clean.log 2>&1 && sleep 1
+if [ -z $clean_reads ] && [ -z $fastqc_clean ] ; then
+
+  echo "$(date '+%Y-%m-%d %H:%M:%S'): fastqc on trimmed reads"
+  nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE} -params-file ${PARAMS} --user "$(id -u):$(id -g)" --fastqc_raw_data ${clean_reads} --fastqc_output ${fastqc_clean} -profile ${PROFILE} >> ${LOGS}/nf-fastqc-clean.log 2>&1 && sleep 1
+
+else
+
+  echo "$(date '+%Y-%m-%d %H:%M:%S'): could not perform fastq on trimmed reads, please set `clean_reads=<path_to_cutadapt_output>` and `fastqc_clean=<path_to_fastq_output_from_trimmed_reads>`. 
+
+fi
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck count"
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} --user "$(id -u):$(id -g)" -entry mageck_count -profile ${PROFILE} >> ${LOGS}/nf-mageck-count.log 2>&1 && sleep 1
@@ -181,4 +188,3 @@ echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck flute"
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} --user "$(id -u):$(id -g)" -entry mageck_flute -profile ${PROFILE} >> ${LOGS}/nf-mageck-flute.log 2>&1 && sleep 1
 
 exit
-
