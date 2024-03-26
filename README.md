@@ -21,4 +21,4 @@ This workflow is based on the following nextflow pipes:
 - https://github.com/mpg-age-bioinformatics/nf-acer
 - https://github.com/mpg-age-bioinformatics/nf-maude
 
-Once run you will find in the `work` folder the file `software.txt` with information on all the respective versions used for your run.
+Once run is complete you will find in the `work` folder the file `software.txt` with information on all the respective versions used for your run.
