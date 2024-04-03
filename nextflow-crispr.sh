@@ -147,7 +147,7 @@ echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck test"
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_test -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-test.log ${LOGS_}/nf-mageck-test.log && sleep 1
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): magecku"
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry magecku -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-u.log ${LOGS_}/nf-mageck-u.log && sleep 1
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry magecku -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-u.log ${LOGS_}/nf-mageck-u.log & MAGECK_U_PID=$!
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck pathway"
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_pathway -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-pathway.log ${LOGS_}/nf-mageck-pathway.log & MAGECK_PATHWAY_PID=$!
@@ -180,6 +180,7 @@ nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry 
 
 for PID in "${FASTQC_PID}:FASTQC" \
   "${FASTQC_CLEAN_PID}:FASTQC_CLEAN" \
+  "${MAGECK_U_PID}:MAGECK_U_PID" \
   "${MAGECK_PATHWAY_PID}:MAGECK_PATHWAY" \
   "${MAGECK_PLOT_PID}:MAGECK_PLOT" \
   "${BAGEL_PID}:BAGEL" \
