@@ -47,9 +47,13 @@
   "output_acer":"/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/drugz_output",
   "use_neg_ctrl":"T",
   "using_master_library":"F",
-  "acer_master_library":"none"
+  "acer_master_library":"none",
   "output_maude":"/nexus/posix0/MAGE-flaski/service/hpc/home/jboucas/nextflow-crispr-data/maude_output",
-  "facs":""
-  "ctrl_guides":""
-  "skip_mle":"False"
+  "facs":"",
+  "ctrl_guides":"",
+  "skip_mle":"False",
+  "mageck_counts_file" : "/nexus/posix0/MAGE-flaski/service/posit/home/aiqbal/nf-cleanR-dev/input/counts.count.txt",
+  "crisprcleanr_output" : "/nexus/posix0/MAGE-flaski/service/posit/home/aiqbal/nf-cleanR-dev/out/",
+  "lib_file_cleanR" : "/nexus/posix0/MAGE-flaski/service/posit/home/aiqbal/nf-cleanR-dev/input/new_lib.tsv",
+  "ncontrols" : 1
 }

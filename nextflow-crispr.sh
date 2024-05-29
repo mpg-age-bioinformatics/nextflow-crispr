@@ -69,14 +69,18 @@ if [[ "$1" == "release" ]] ;
 
     MAUDE_RELEASE=$(get_latest_release ${ORIGIN}nf-maude)
     echo "${ORIGIN}nf-maude:${MAUDE_RELEASE}" >> ${LOGS}/software.txt
-    ACER_RELEASE="-r ${MAUDE_RELEASE}"
+    MAUDE_RELEASE="-r ${MAUDE_RELEASE}"
+
+    CLEANR_RELEASE=$(get_latest_release ${ORIGIN}nf-crisprcleanr)
+    echo "${ORIGIN}nf-crisprcleanr:${CLEANR_RELEASE}" >> ${LOGS}/software.txt
+    CLEANR_RELEASE="-r ${CLEANR_RELEASE}"
     
     uniq ${LOGS}/software.txt ${LOGS}/software.txt_
     mv ${LOGS}/software.txt_ ${LOGS}/software.txt
     
 else
 
-  for repo in nf-fastqc nf-cutadapt nf-mageck nf-bagel nf-drugz nf-acer nf-maude ; 
+  for repo in nf-fastqc nf-cutadapt nf-mageck nf-bagel nf-drugz nf-acer nf-maude nf-crisprcleanr ; 
     do
 
       if [[ ! -e ${repo} ]] ;
@@ -118,6 +122,7 @@ get_images() {
   nextflow run ${ORIGIN}nf-drugz ${DRUGZ_RELEASE} -params-file ${PARAMS} -entry images -profile ${PROFILE} 2>&1 | tee ${LOGS}/get_images.log ${LOGS_}/get_images.log && sleep 1
   nextflow run ${ORIGIN}nf-acer ${ACER_RELEASE} -params-file ${PARAMS} -entry images -profile ${PROFILE} 2>&1 | tee ${LOGS}/get_images.log ${LOGS_}/get_images.log && sleep 1
   nextflow run ${ORIGIN}nf-maude ${MAUDE_RELEASE} -params-file ${PARAMS} -entry images -profile ${PROFILE} 2>&1 | tee ${LOGS}/get_images.log ${LOGS_}/get_images.log && sleep 1
+  nextflow run ${ORIGIN}nf-crisprcleanr ${CLEANR_RELEASE} -params-file ${PARAMS} -entry images -profile ${PROFILE} 2>&1 | tee ${LOGS}/get_images.log ${LOGS_}/get_images.log && sleep 1
 
 }
 
@@ -145,6 +150,12 @@ nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry 
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck test"
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry mageck_test -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-test.log ${LOGS_}/nf-mageck-test.log && sleep 1
+
+echo "$(date '+%Y-%m-%d %H:%M:%S'): cleanR library formatting"
+nextflow run ${ORIGIN}nf-crisprcleanr ${CLEANR_RELEASE} -params-file ${PARAMS} -entry lib_file_formatting -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-cleanR-lib.log ${LOGS_}/nf-cleanR-lib.log && sleep 1
+
+echo "$(date '+%Y-%m-%d %H:%M:%S'): cleanR pipe"
+nextflow run ${ORIGIN}nf-crisprcleanr ${CLEANR_RELEASE} -params-file ${PARAMS} -entry cleanR_workflow -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-cleanR-pipe.log ${LOGS_}/nf-cleanR-pipe.log && sleep 1
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): magecku"
 nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -params-file ${PARAMS} -entry magecku -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-u.log ${LOGS_}/nf-mageck-u.log & MAGECK_U_PID=$!
