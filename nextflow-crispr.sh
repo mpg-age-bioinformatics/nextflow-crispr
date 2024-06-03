@@ -10,6 +10,8 @@ source crispr.config
 
 LOGS_=${project_folder}/logs
 
+export NXF_WORK=${project_folder}/nfx_work
+
 mkdir -p ${LOGS} ${LOGS_}
 
 ## functions
