@@ -136,10 +136,10 @@ run_upload(){
 get_images && sleep 1
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): preprocess"
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.pre_process -params-file ${PARAMS} -entry pre_process -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-pre_process.log ${LOGS_}/nf-mageck-pre_process.log && sleep 1
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck_pre_process -params-file ${PARAMS} -entry pre_process -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-pre_process.log ${LOGS_}/nf-mageck-pre_process.log && sleep 1
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): cleanR library formatting"
-nextflow run ${ORIGIN}nf-crisprcleanr ${CLEANR_RELEASE} -w ${LOGS}/.cleanR-lib -params-file ${PARAMS} -entry lib_file_formatting -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-cleanR-lib.log ${LOGS_}/nf-cleanR-lib.log && sleep 1
+nextflow run ${ORIGIN}nf-crisprcleanr ${CLEANR_RELEASE} -w ${LOGS}/.crisprcleanr_lib_file_formatting -params-file ${PARAMS} -entry lib_file_formatting -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-cleanR-lib.log ${LOGS_}/nf-cleanR-lib.log && sleep 1
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): fastqc"
 nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE} -w ${LOGS}/.fastqc -params-file ${PARAMS} -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-fastqc.log ${LOGS_}/nf-fastqc.log && sleep 1 & FASTQC_PID=$!
@@ -148,25 +148,25 @@ echo "$(date '+%Y-%m-%d %H:%M:%S'): cutadapt"
 nextflow run ${ORIGIN}nf-cutadapt ${CUTADAPT_RELEASE} -w ${LOGS}/.cutadapt -params-file ${PARAMS} -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-cutadapt.log ${LOGS_}/nf-cutadapt.log && sleep 1
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): fastqc on trimmed reads"
-nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE}  -w ${LOGS}/.fastqc-clean -params-file ${PARAMS} --fastqc_raw_data ${clean_reads} --fastqc_output ${fastqc_clean} -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-fastqc-clean.log  ${LOGS_}/nf-fastqc-clean.log & FASTQC_CLEAN_PID=$!
+nextflow run ${ORIGIN}nf-fastqc ${FASTQC_RELEASE}  -w ${LOGS}/.fastqc_clean -params-file ${PARAMS} --fastqc_raw_data ${clean_reads} --fastqc_output ${fastqc_clean} -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-fastqc-clean.log  ${LOGS_}/nf-fastqc-clean.log & FASTQC_CLEAN_PID=$!
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck count"
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck-count -params-file ${PARAMS} -entry mageck_count -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-count.log ${LOGS_}/nf-mageck-count.log && sleep 1
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck_count -params-file ${PARAMS} -entry mageck_count -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-count.log ${LOGS_}/nf-mageck-count.log && sleep 1
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck test"
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck-test -params-file ${PARAMS} -entry mageck_test -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-test.log ${LOGS_}/nf-mageck-test.log && sleep 1
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck_test -params-file ${PARAMS} -entry mageck_test -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-test.log ${LOGS_}/nf-mageck-test.log && sleep 1
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): cleanR pipe"
-nextflow run ${ORIGIN}nf-crisprcleanr ${CLEANR_RELEASE} -w ${LOGS}/.cleanR-pipe -params-file ${PARAMS} -entry cleanR_workflow -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-cleanR-pipe.log ${LOGS_}/nf-cleanR-pipe.log && sleep 1
+nextflow run ${ORIGIN}nf-crisprcleanr ${CLEANR_RELEASE} -w ${LOGS}/.crisprcleanr_cleanR_workflow -params-file ${PARAMS} -entry cleanR_workflow -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-cleanR-pipe.log ${LOGS_}/nf-cleanR-pipe.log && sleep 1
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): magecku"
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck-u -params-file ${PARAMS} -entry magecku -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-u.log ${LOGS_}/nf-mageck-u.log && sleep 1 & MAGECK_U_PID=$!
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck_magecku -params-file ${PARAMS} -entry magecku -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-u.log ${LOGS_}/nf-mageck-u.log && sleep 1 & MAGECK_U_PID=$!
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck pathway"
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck-pathway -params-file ${PARAMS} -entry mageck_pathway -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-pathway.log ${LOGS_}/nf-mageck-pathway.log && sleep 1 & MAGECK_PATHWAY_PID=$!
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck_pathway -params-file ${PARAMS} -entry mageck_pathway -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-pathway.log ${LOGS_}/nf-mageck-pathway.log && sleep 1 & MAGECK_PATHWAY_PID=$!
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck plot"
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck-plot -params-file ${PARAMS} -entry mageck_plot -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-plot.log ${LOGS_}/nf-mageck-plot.log && sleep 1 & MAGECK_PLOT_PID=$!
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck_plot -params-file ${PARAMS} -entry mageck_plot -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-plot.log ${LOGS_}/nf-mageck-plot.log && sleep 1 & MAGECK_PLOT_PID=$!
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): bagel"
 nextflow run ${ORIGIN}nf-bagel ${BAGEL_RELEASE} -w ${LOGS}/.bagel -params-file ${PARAMS} -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-bagel.log ${LOGS_}/nf-bagel.log && sleep 1 & BAGEL_PID=$!
@@ -181,14 +181,14 @@ echo "$(date '+%Y-%m-%d %H:%M:%S'): maude"
 nextflow run ${ORIGIN}nf-maude ${MAUDE_RELEASE} -w ${LOGS}/.maude -params-file ${PARAMS} -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-maude.log ${LOGS_}/nf-maude.log && sleep 1 & MAUDE_PID=$!
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck mle"
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck-premle -params-file ${PARAMS} -entry mageck_premle -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-premle.log ${LOGS_}/nf-mageck-premle.log && \
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck-mle -params-file ${PARAMS} -entry mageck_mle -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-mle.log ${LOGS_}/nf-mageck-mle.log && sleep 1
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck_premle -params-file ${PARAMS} -entry mageck_premle -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-premle.log ${LOGS_}/nf-mageck-premle.log && \
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck_mle -params-file ${PARAMS} -entry mageck_mle -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-mle.log ${LOGS_}/nf-mageck-mle.log && sleep 1
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck vispr"
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck-vispr -params-file ${PARAMS} -entry mageck_vispr -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-vispr.log ${LOGS_}/nf-mageck-vispr.log && sleep 1 & MAGECK_VISPR_PID=$!
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck_vispr -params-file ${PARAMS} -entry mageck_vispr -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-vispr.log ${LOGS_}/nf-mageck-vispr.log && sleep 1 & MAGECK_VISPR_PID=$!
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): mageck flute"
-nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck-flute -params-file ${PARAMS} -entry mageck_flute -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-flute.log ${LOGS_}/nf-mageck-flute.log && sleep 1 & MAGECK_FLUTE_PID=$!
+nextflow run ${ORIGIN}nf-mageck ${MAGECK_RELEASE} -w ${LOGS}/.mageck_flute -params-file ${PARAMS} -entry mageck_flute -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-mageck-flute.log ${LOGS_}/nf-mageck-flute.log && sleep 1 & MAGECK_FLUTE_PID=$!
 
 
 for PID in "${FASTQC_PID}:FASTQC" \
