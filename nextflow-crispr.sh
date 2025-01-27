@@ -13,7 +13,6 @@ LOGS_=${project_folder}/logs
 export NXF_WORK=${project_folder}/nfx_work
 
 mkdir -p ${LOGS} ${LOGS_}
-mkdir ./work
 
 ## functions
 get_latest_release() {
