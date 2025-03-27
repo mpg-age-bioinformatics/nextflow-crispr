@@ -175,7 +175,7 @@ echo "$(date '+%Y-%m-%d %H:%M:%S'): drugz"
 (nextflow run ${ORIGIN}nf-drugz ${DRUGZ_RELEASE} -w ${LOGS}/.drugz -params-file ${PARAMS} -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-drugz.log ${LOGS_}/nf-drugz.log && sleep 1) & DRUGZ_PID=$!
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): acer"
-(nextflow run ${ORIGIN}nf-acer ${ACER_RELEASE} -w ${LOGS}/.acer -params-file ${PARAMS} -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-acer.log ${LOGS_}/nf-acer.log && sleep 1 &) ACER_PID=$!
+(nextflow run ${ORIGIN}nf-acer ${ACER_RELEASE} -w ${LOGS}/.acer -params-file ${PARAMS} -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-acer.log ${LOGS_}/nf-acer.log && sleep 1) & ACER_PID=$!
 
 echo "$(date '+%Y-%m-%d %H:%M:%S'): maude"
 (nextflow run ${ORIGIN}nf-maude ${MAUDE_RELEASE} -w ${LOGS}/.maude -params-file ${PARAMS} -profile ${PROFILE} 2>&1 | tee ${LOGS}/nf-maude.log ${LOGS_}/nf-maude.log && sleep 1) & MAUDE_PID=$!
